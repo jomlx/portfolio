@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
+@import "tailwindcss";
+
+@theme {
+    --font-title: "Architects Daughter", cursive;
+    --font-body: "Special Elite", cursive;
+    --font-marker: "Permanent Marker", cursive;
+
+    --color-cork: #b07d4b;
+    --color-cork-dark: #8b5e34;
+    --color-cork-light: #c99b6d;
+    --color-string-red: #c0392b;
+    --color-pin-red: #e74c3c;
+    --color-bulb-glow: #f5c842;
+    --color-manila: #f2e6c9;
+    --color-paper-white: #faf8f0;
+    --color-ink: #2c1810;
+    --color-marker-red: #c0392b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-body);
+    background: #1a120a;
+    color: var(--color-ink);
+}
+
+/* Permanent Marker utility */
+.font-marker {
+    font-family: var(--font-marker);
+}
