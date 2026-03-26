@@ -24,7 +24,9 @@ export interface CaseFile {
   title: string;
   subtitle: string;
   type: CardType;
+  contentLabel?: string;
   content: string;
+  detailsLabel?: string;
   details: string[];
   media?: CaseFileMedia[];
   x: number;

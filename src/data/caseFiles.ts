@@ -47,14 +47,16 @@ const caseFiles: CaseFile[] = [
     type: "silhouette",
     title: '"He is known as Joml"',
     subtitle: "The Midnight Creator",
+    contentLabel: "Education",
     content:
-      "Jomel is very skilled in graphic design, videography, and photography. A creative professional who studied at Bulacan State University Sarmiento Campus. Known for late-night creative sessions and producing compelling visual content.",
+      "Bulacan State University - Sarmiento Campus \nBachelor of Science in Information Technology\n(2022 - 2026)\n\nSapang Palay National High School – Senior High School\nScience, Technology, Engineering, and Mathematics\n(2020 - 2022)",
     details: [
       "Alias: The Nocturnal Artist",
       "Status: Actively Creating",
       "Last Seen: Behind a glowing screen at 3 AM",
       "Specialties: Design, Video, Photography",
     ],
+    detailsLabel: "Evidence Log",
     connections: ["design", "clue-where"],
     pinOffset: { x: 5, y: -2 },
   },
@@ -72,6 +74,7 @@ const caseFiles: CaseFile[] = [
     type: "torn-paper-grey",
     title: "Graphic Design",
     subtitle: "Poster & Visual Art",
+    contentLabel: "Case Summary",
     content:
       "A comprehensive collection of digital posters and graphic design compositions. Showcasing expertise in typography, blending modes, visual hierarchy, and color theory. Each piece demonstrates careful attention to composition and aesthetic balance.",
     details: [
@@ -80,6 +83,7 @@ const caseFiles: CaseFile[] = [
       "Style: Modern & Conceptual",
       "Techniques: Layering, Blending, Typography",
     ],
+    detailsLabel: "Evidence Log",
     isDraggable: true,
     connections: ["video"],
     pinOffset: { x: -4, y: 10 },
@@ -101,6 +105,7 @@ const caseFiles: CaseFile[] = [
     type: "taped-polaroid",
     title: "Video\nGraphy",
     subtitle: "Editing & Motion",
+    contentLabel: "Case Summary",
     content:
       "Dynamic flow edits and cinematic sequences demonstrating mastery of pacing and visual rhythm. Each project showcases careful editing, smooth transitions, and compelling storytelling through video.",
     details: [
@@ -109,22 +114,23 @@ const caseFiles: CaseFile[] = [
       "Style: Cinematic & Energetic",
       "Techniques: Color Grading, Motion Graphics",
     ],
+    detailsLabel: "Evidence Log",
     connections: [],
     pinOffset: { x: 10, y: -4 },
     media: [
-      { type: "video", url: VIDEO_URLS.cinematic, caption: "Cinematic" },
-      {
-        type: "video",
-        url: VIDEO_URLS.maryJosette ?? undefined,
-        caption: "Mary Josette Academy",
-      },
-      { type: "video", url: VIDEO_URLS.plantaria, caption: "Plantaria" },
-      { type: "video", url: VIDEO_URLS.sonavi ?? undefined, caption: "Sonavi" },
       {
         type: "video",
         url: VIDEO_URLS.schoolCinematic,
         caption: "School Cinematic",
       },
+      { type: "video", url: VIDEO_URLS.plantaria, caption: "Plantaria" },
+      { type: "video", url: VIDEO_URLS.sonavi ?? undefined, caption: "Sonavi" },
+      {
+        type: "video",
+        url: VIDEO_URLS.maryJosette ?? undefined,
+        caption: "Mary Josette Academy",
+      },
+      { type: "video", url: VIDEO_URLS.cinematic, caption: "Cinematic" },
     ],
   },
 
@@ -137,6 +143,7 @@ const caseFiles: CaseFile[] = [
     type: "torn-paper-brown",
     title: "Photo\nGraphy",
     subtitle: "Visual Documentation",
+    contentLabel: "Case Summary",
     content:
       "Photographic work capturing moments and subjects with artistic vision. A collection of carefully composed images demonstrating lighting, composition, and subject matter expertise.",
     details: [
@@ -144,6 +151,7 @@ const caseFiles: CaseFile[] = [
       "Style: Artistic & Documentary",
       "Subjects: Diverse & Compelling",
     ],
+    detailsLabel: "Evidence Log",
     connections: ["about"],
     pinOffset: { x: -5, y: 8 },
   },
@@ -161,6 +169,7 @@ const caseFiles: CaseFile[] = [
     type: "torn-paper-brown",
     title: "Web Design",
     subtitle: "Digital & Hand-drawn",
+    contentLabel: "Case Summary",
     content:
       "Original illustration work showcasing artistic skill and creative vision. A collection of diverse styles and subjects demonstrating versatility in digital and traditional illustration techniques.",
     details: [
@@ -168,6 +177,7 @@ const caseFiles: CaseFile[] = [
       "Style: Varied & Experimental",
       "Subjects: Character Design, Conceptual",
     ],
+    detailsLabel: "Evidence Log",
     connections: ["about"],
     pinOffset: { x: 2, y: 10 },
   },
@@ -181,6 +191,7 @@ const caseFiles: CaseFile[] = [
     type: "clue-circle",
     title: "Technical\nStack",
     subtitle: "Case Investigation",
+    contentLabel: "Case Summary",
     content:
       "Follow the trails. Connect the dots. Discover where the Nocturnal Artist has left their mark across the digital landscape.",
     details: [
@@ -188,6 +199,7 @@ const caseFiles: CaseFile[] = [
       "Status: Creating",
       "Next Clue: Check the evidence",
     ],
+    detailsLabel: "Investigation Log",
     connections: [],
     isDraggable: false,
     pinOffset: { x: 0, y: 5 },
@@ -202,6 +214,7 @@ const caseFiles: CaseFile[] = [
     type: "torn-paper-brown",
     title: "find\nout\nabout\nhim!",
     subtitle: "Investigate Further",
+    contentLabel: "About Me",
     content:
       "Click through the case files to discover more about The Nocturnal Artist. Each file contains evidence of creative mastery and artistic passion.",
     details: [
@@ -209,6 +222,7 @@ const caseFiles: CaseFile[] = [
       "Evidence: Portfolio pieces available",
       "Contact: Available for collaboration",
     ],
+    detailsLabel: "Evidence Log",
     connections: ["illustration"],
     isDraggable: false,
     pinOffset: { x: 3, y: 12 },
@@ -223,9 +237,11 @@ const caseFiles: CaseFile[] = [
     type: "cork-text",
     title: "",
     subtitle: "",
+    contentLabel: "Case Summary",
     content:
       '+63 950 501 5009\nmislos.jomel@gmail.com\n\n"I will be an\nimportant part of\nthe world\'s progress."',
     details: [],
+    detailsLabel: "Evidence Log",
     connections: [],
     isDraggable: false,
     pinOffset: { x: 0, y: 2 },

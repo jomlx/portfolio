@@ -286,6 +286,8 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
 
   if (!card) return null;
   const mediaItems = card.media ?? [];
+
+  // Keep the newspaper column present if it naturally has text
   const hasText = !!(card.content || (card.details && card.details.length > 0));
 
   return (
@@ -591,7 +593,7 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
                       opacity: 0.75,
                     }}
                   >
-                    ▸ Case Summary
+                    ▸ {card.contentLabel || "Case Summary"}
                   </p>
 
                   {/* Description */}
@@ -603,6 +605,7 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
                         fontSize: "clamp(0.55rem, 0.9vw, 0.75rem)",
                         lineHeight: 1.55,
                         marginBottom: "10px",
+                        whiteSpace: "pre-wrap",
                       }}
                     >
                       {card.content}
@@ -632,7 +635,7 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
                           marginBottom: "6px",
                         }}
                       >
-                        ▸ Evidence Log
+                        ▸ {card.detailsLabel || "Evidence Log"}
                       </h3>
                       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                         {card.details.map((detail, i) => (
@@ -898,7 +901,7 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
                   {/* ─── Red String Layer ─── */}
                   <svg
                     className="absolute inset-0 w-full h-full"
-                    style={{ zIndex: 14, pointerEvents: "none" }}
+                    style={{ zIndex: 25, pointerEvents: "none" }}
                     aria-hidden="true"
                   >
                     <g style={{ pointerEvents: "auto" }}>
