@@ -4,9 +4,6 @@
  * Prevents large video files from being committed to the repository
  */
 
-import MJAVIDS from "../assets/video-edit/mary-josette-academy.mp4";
-import SONAVI from "../assets/video-edit/sonavi.mp4";
-
 /**
  * Video URL configuration
  * All videos are served from CDN (Cloudinary or similar)
@@ -14,9 +11,9 @@ import SONAVI from "../assets/video-edit/sonavi.mp4";
  */
 export const VIDEO_URLS = {
   cinematic: import.meta.env.VITE_VIDEO_CINEMATIC,
-  maryJosette: MJAVIDS,
+  maryJosette: import.meta.env.VITE_VIDEO_MARY_JOSETTE,
   plantaria: import.meta.env.VITE_VIDEO_PLANTARIA,
-  sonavi: SONAVI,
+  sonavi: import.meta.env.VITE_VIDEO_SONAVI,
   schoolCinematic: import.meta.env.VITE_VIDEO_SCHOOL_CINEMATIC,
 } as const;
 
