@@ -4,8 +4,8 @@ import Bulb from "./Bulb";
 import StringConnector from "./StringConnector";
 import CaseFileModal from "./CaseFileModal";
 import caseFiles from "../data/caseFiles";
-import Paper from "../assets/paper.jpg";
-import Wall from "../assets/wall.jpg";
+import Paper from "../assets/paper.webp";
+import Wall from "../assets/wall.webp";
 import type { CaseFile, PinPosition, CardConnection } from "../types";
 import {
   buildConnectionMap,
@@ -31,6 +31,13 @@ export default function CorkBoard() {
     {},
   );
   const [draggingId, setDraggingId] = useState<string | null>(null);
+
+  const handleDragStateChange = useCallback((id: string, isDragging: boolean) => {
+    setDraggingId(isDragging ? id : null);
+  }, []);
+
+  const handleModalClose = useCallback(() => setSelectedCard(null), []);
+  const handleToggleLight = useCallback(() => setIsLightOn((p) => !p), []);
 
   const updatePinPositions = useCallback(() => {
     if (!boardRef.current) return;
@@ -70,13 +77,13 @@ export default function CorkBoard() {
   }, []);
 
   useEffect(() => {
-    let rAF: number;
+    let timeoutId: ReturnType<typeof setTimeout>;
     const startTime = Date.now();
 
     const loop = () => {
       updatePinPositions();
       if (Date.now() - startTime < ANIMATION_TIMINGS.layoutUpdateWindow) {
-        rAF = requestAnimationFrame(loop);
+        timeoutId = setTimeout(loop, 40); // Throttle string updates to ~25fps to prevent severe layout thrashing
       }
     };
     loop();
@@ -86,7 +93,7 @@ export default function CorkBoard() {
     if (boardRef.current) observer.observe(boardRef.current);
 
     return () => {
-      cancelAnimationFrame(rAF);
+      clearTimeout(timeoutId);
       window.removeEventListener("resize", updatePinPositions);
       observer.disconnect();
     };
@@ -302,9 +309,7 @@ export default function CorkBoard() {
             <PinnedCard
               card={card}
               onPinMove={handlePinMove}
-              onDragStateChange={(isDragging: boolean) =>
-                setDraggingId(isDragging ? card.id : null)
-              }
+              onDragStateChange={handleDragStateChange}
               onClick={setSelectedCard}
             />
           </motion.div>
@@ -335,9 +340,9 @@ export default function CorkBoard() {
       {/* ── CaseFileModal – slides in from below simultaneously ── */}
       <CaseFileModal
         card={selectedCard}
-        onClose={() => setSelectedCard(null)}
+        onClose={handleModalClose}
         isLightOn={isLightOn}
-        onToggleLight={() => setIsLightOn((prev) => !prev)}
+        onToggleLight={handleToggleLight}
       />
 
       {/* ── Single shared Bulb — fixed above ALL layers including the modal ── */}
@@ -348,7 +353,7 @@ export default function CorkBoard() {
         style={{ zIndex: 250 }}
       >
         <div className="pointer-events-auto">
-          <Bulb isOn={isLightOn} onToggle={() => setIsLightOn((prev) => !prev)} />
+          <Bulb isOn={isLightOn} onToggle={handleToggleLight} />
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ import { ClueCircleCard } from "./card/clue-circle-card";
 interface PinnedCardProps {
   card: CaseFile;
   onPinMove: (id: string, x: number, y: number) => void;
-  onDragStateChange: (isDragging: boolean) => void;
+  onDragStateChange: (id: string, isDragging: boolean) => void;
   onClick: (card: CaseFile) => void;
 }
 
@@ -64,7 +64,7 @@ function PinnedCard({
 
       if (first) {
         onDragStart();
-        onDragStateChange(true);
+        onDragStateChange(card.id, true);
       }
 
       if (down) {
@@ -76,7 +76,7 @@ function PinnedCard({
       if (last) {
         setPosition({ x: 0, y: 0 });
         onDragEnd();
-        onDragStateChange(false);
+        onDragStateChange(card.id, false);
         requestAnimationFrame(updatePinPosition);
       }
     },

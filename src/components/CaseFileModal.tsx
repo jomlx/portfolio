@@ -6,8 +6,8 @@ import { COLORS, FONTS, EFFECTS } from "../constants/styles";
 import { getRandomRotation } from "../utils/cardStyles";
 import StringConnector from "./StringConnector";
 import { getModalConnections } from "../data/modalConnections";
-import Wall from "../assets/wall.jpg";
-import Paper from "../assets/paper.jpg";
+import Wall from "../assets/wall.webp";
+import Paper from "../assets/paper.webp";
 
 /* ─── Spring config — must match CorkBoard's SLIDE_SPRING ─── */
 const SLIDE_SPRING = { type: "spring", damping: 28, stiffness: 280 } as const;
@@ -48,7 +48,7 @@ const MEDIA_SLOTS = [
 ] as const;
 
 /* ─── MiniPin ─── */
-function MiniPin({ size = 14 }: { size?: number }) {
+const MiniPin = memo(function MiniPin({ size = 14 }: { size?: number }) {
   return (
     <div
       style={{
@@ -76,10 +76,10 @@ function MiniPin({ size = 14 }: { size?: number }) {
       />
     </div>
   );
-}
+});
 
 /* ─── Media Preview Lightbox ─── */
-function MediaPreview({
+const MediaPreview = memo(function MediaPreview({
   item,
   onClose,
 }: {
@@ -224,7 +224,7 @@ function MediaPreview({
       </motion.div>
     </motion.div>
   );
-}
+});
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CaseFileModal
@@ -238,6 +238,8 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
     {},
   );
   const [previewItem, setPreviewItem] = useState<CaseFileMedia | null>(null);
+
+  const handlePreviewClose = useCallback(() => setPreviewItem(null), []);
 
   const stringPairs = card ? getModalConnections(card.id) : [];
 
@@ -970,7 +972,7 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
         {previewItem && (
           <MediaPreview
             item={previewItem}
-            onClose={() => setPreviewItem(null)}
+            onClose={handlePreviewClose}
           />
         )}
       </AnimatePresence>

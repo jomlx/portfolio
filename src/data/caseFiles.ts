@@ -115,11 +115,11 @@ const caseFiles: CaseFile[] = [
       { type: "video", url: VIDEO_URLS.cinematic, caption: "Cinematic" },
       {
         type: "video",
-        url: VIDEO_URLS.maryJosette,
+        url: VIDEO_URLS.maryJosette ?? undefined,
         caption: "Mary Josette Academy",
       },
       { type: "video", url: VIDEO_URLS.plantaria, caption: "Plantaria" },
-      { type: "video", url: VIDEO_URLS.sonavi, caption: "Sonavi" },
+      { type: "video", url: VIDEO_URLS.sonavi ?? undefined, caption: "Sonavi" },
       {
         type: "video",
         url: VIDEO_URLS.schoolCinematic,
