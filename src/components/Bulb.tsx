@@ -1,11 +1,13 @@
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 import { useRef } from "react";
+import { useIsMobile } from "../hooks/useIsMobile";
 interface BulbProps {
   isOn: boolean;
   onToggle: () => void;
 }
 export default function Bulb({ isOn, onToggle }: BulbProps) {
+  const isMobile = useIsMobile();
   const [{ y }, api] = useSpring(() => ({
     y: 0,
     config: { tension: 350, friction: 25 },
@@ -32,6 +34,49 @@ export default function Bulb({ isOn, onToggle }: BulbProps) {
   );
   const duration = "var(--transition-duration, 150ms)";
   const transition = `all ${duration} ease-in-out`;
+
+  /* ── Mobile: compact fixed button in the bottom-right corner ── */
+  if (isMobile) {
+    return (
+      <button
+        onClick={onToggle}
+        aria-label={isOn ? "Turn light off" : "Turn light on"}
+        style={{
+          position: "fixed",
+          top: "4vh",
+          right: "4vw",
+          zIndex: 250,
+          width: 64,
+          height: 64,
+          borderRadius: "50%",
+          border: "none",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: isOn
+            ? "radial-gradient(ellipse at 50% 40%, rgba(255,220,80,0.95) 0%, rgba(255,160,20,0.9) 50%, rgba(200,100,10,0.85) 100%)"
+            : "radial-gradient(ellipse at 50% 40%, rgba(80,80,80,0.85) 0%, rgba(50,50,50,0.9) 100%)",
+          boxShadow: isOn
+            ? "0 0 16px 6px rgba(255,180,40,0.45), 0 2px 8px rgba(0,0,0,0.5)"
+            : "0 2px 8px rgba(0,0,0,0.6)",
+          transition,
+        }}
+      >
+        {/* Filament icon */}
+        <svg width="22" height="22" viewBox="0 0 30 30" style={{ opacity: isOn ? 0.9 : 0.55, transition }}>
+          <path
+            d="M15 26 L15 18 C15 14, 7 12, 7 8 C7 3, 23 3, 23 8 C23 12, 15 14, 15 18"
+            fill="none"
+            stroke={isOn ? "rgba(255,230,100,0.95)" : "rgba(200,200,200,0.7)"}
+            strokeWidth="1.8"
+            strokeLinecap="round"
+          />
+        </svg>
+      </button>
+    );
+  }
+
   return (
     <div className="absolute top-0 right-16 md:right-65 flex flex-col items-center z-40 touch-none select-none">
       {/* Cord */}

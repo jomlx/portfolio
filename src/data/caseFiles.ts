@@ -46,7 +46,7 @@ const caseFiles: CaseFile[] = [
     rotation: 0,
     type: "silhouette",
     title: '"He is known as Joml"',
-    subtitle: "The Midnight Creator",
+    subtitle: "Joml Creator",
     contentLabel: "Education",
     content:
       "Bulacan State University - Sarmiento Campus \nBachelor of Science in Information Technology\n(2022 - 2026)\n\nSapang Palay National High School – Senior High School\nScience, Technology, Engineering, and Mathematics\n(2020 - 2022)",

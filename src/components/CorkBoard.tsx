@@ -15,6 +15,7 @@ import { PORTFOLIO_META, ANIMATION_TIMINGS } from "../constants/config";
 import { EFFECTS } from "../constants/styles";
 import PinnedCard from "./pinned/pin-card";
 import { ThumbTack } from "./thumb-tacks";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 /* ── Spring config shared between CorkBoard slide-out and CaseFileModal slide-in ── */
 const SLIDE_SPRING = { type: "spring", damping: 28, stiffness: 280 } as const;
@@ -23,6 +24,7 @@ export default function CorkBoard() {
   const boardRef = useRef<HTMLDivElement>(null);
   const [selectedCard, setSelectedCard] = useState<CaseFile | null>(null);
   const [hasEntered, setHasEntered] = useState(false);
+  const isMobile = useIsMobile();
 
   /* ── Single shared bulb state ── */
   const [isLightOn, setIsLightOn] = useState(true);
@@ -83,7 +85,7 @@ export default function CorkBoard() {
     const loop = () => {
       updatePinPositions();
       if (Date.now() - startTime < ANIMATION_TIMINGS.layoutUpdateWindow) {
-        timeoutId = setTimeout(loop, 40); // Throttle string updates to ~25fps to prevent severe layout thrashing
+        timeoutId = setTimeout(loop, 40);
       }
     };
     loop();
@@ -134,9 +136,7 @@ export default function CorkBoard() {
       id="corkboard"
       role="main"
       aria-label="Interactive portfolio corkboard with case files"
-      style={{
-        filter: "url(#modal-grain)",
-      }}
+      style={{ filter: "url(#modal-grain)" }}
     >
       <svg className="hidden">
         <filter id="grain">
@@ -158,6 +158,7 @@ export default function CorkBoard() {
         transition={SLIDE_SPRING}
         style={{ willChange: "transform" }}
       >
+        {/* ── Grain overlay ── */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
@@ -167,13 +168,13 @@ export default function CorkBoard() {
           }}
         />
 
+        {/* ── Vignette ── */}
         <div
           className="absolute inset-0 pointer-events-none z-10"
-          style={{
-            background: EFFECTS.vignette,
-          }}
+          style={{ background: EFFECTS.vignette }}
         />
 
+        {/* ── Wall texture ── */}
         <div
           className="absolute pointer-events-none z-0 w-full h-full bg-cover bg-center opacity-80"
           style={{ backgroundImage: `url(${Wall})` }}
@@ -193,40 +194,40 @@ export default function CorkBoard() {
         </div>
 
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-2 pointer-events-none z-0 w-2xl h-140 shadow-md shadow-black bg-cover bg-center opacity-80"
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 shadow-md shadow-black bg-cover bg-center opacity-80 ${isMobile
+            ? "w-full h-[78vh]"
+            : "w-2xl h-140 rotate-2"
+            }`}
           style={{ backgroundImage: `url(${Paper})` }}
           aria-hidden="true"
         />
 
+        {/* ── Light pool ── */}
         <div
-          className={`absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 ${isLightOn ? "opacity-100" : "opacity-0"
-            }`}
-          style={{
-            background: EFFECTS.lightPool as string,
-          }}
+          className={`absolute inset-0 z-20 pointer-events-none transition-opacity duration-300 ${isLightOn ? "opacity-100" : "opacity-0"}`}
+          style={{ background: EFFECTS.lightPool as string }}
           aria-hidden="true"
         />
 
+        {/* ── Dark overlay ── */}
         <div
-          className={`absolute inset-0 z-35 pointer-events-none transition-opacity duration-300 ${isLightOn ? "opacity-0" : "opacity-100"
-            }`}
+          className={`absolute inset-0 z-35 pointer-events-none transition-opacity duration-300 ${isLightOn ? "opacity-0" : "opacity-100"}`}
           style={{ background: EFFECTS.darkOverlay as string }}
           aria-hidden="true"
         />
 
+        {/* ── Banner ── */}
         <motion.div
-          className="absolute top-8 left-[55%] -translate-x-1/2 z-30 pointer-events-none select-none"
+          className={`absolute z-30 pointer-events-none select-none ${isMobile ? "top-[calc(11vh-6px)] left-1/2 -translate-x-1/2" : "top-8 left-[55%] -translate-x-1/2"}`}
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: ANIMATION_TIMINGS.bannerDelay, duration: 0.5 }}
         >
-          <div className="relative transform rotate-1">
+          <div className={`relative transform rotate-1 ${isMobile ? 'scale-[0.98] origin-top' : ''}`}>
             <div className="relative inline-block py-2 pr-10 pl-6 bg-[#D4C69E] shadow-[-7px_6px_12px_rgba(0,0,0,0.6)]">
               <div
                 className="absolute -top-4 left-[15%] w-16 h-8 -rotate-2 opacity-70 bg-[#E6DCB8] shadow-[1px_1px_3px_rgba(0,0,0,0.3)]"
-                style={{
-                  clipPath: "polygon(5% 0, 95% 2%, 100% 100%, 0 98%)",
-                }}
+                style={{ clipPath: "polygon(5% 0, 95% 2%, 100% 100%, 0 98%)" }}
                 aria-hidden="true"
               />
               <h1 className="whitespace-nowrap leading-none flex items-baseline font-['Special_Elite',cursive] text-[#222] text-[clamp(2.5rem,8vw,3.8rem)] opacity-85">
@@ -239,8 +240,9 @@ export default function CorkBoard() {
           </div>
         </motion.div>
 
+        {/* ── Case file label ── */}
         <motion.div
-          className="absolute top-19 left-4 md:left-110 z-30 pointer-events-none select-none"
+          className={`absolute z-30 pointer-events-none select-none ${isMobile ? "top-[calc(11vh+30px)] left-2 scale-[0.70] origin-top-left" : "top-19 left-4 md:left-110"}`}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: ANIMATION_TIMINGS.caseFileDelay, duration: 0.5 }}
@@ -256,15 +258,16 @@ export default function CorkBoard() {
             <p className="leading-[0.85] font-['Architects_Daughter',cursive] text-white text-[clamp(14px,3vw,20px)] opacity-90 tracking-widest">
               {PORTFOLIO_META.caseFileNumber}:
             </p>
-            <p className=" leading-tight track-wide truncate max-w-30 md:max-w-none font-['Architects_Daughter',cursive] text-white text-[clamp(11px,2.2vw,14px)] opacity-85">
+            <p className="leading-tight track-wide truncate max-w-30 md:max-w-none font-['Architects_Daughter',cursive] text-white text-[clamp(11px,2.2vw,14px)] opacity-85">
               {PORTFOLIO_META.tagline}
             </p>
           </div>
         </motion.div>
 
+        {/* ── String connectors ── */}
         <svg
-          className="absolute inset-0 w-full h-full pointer-events-none z-20"
-          style={{ pointerEvents: "none" }}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 120, pointerEvents: "none" }}
           aria-hidden="true"
         >
           <g style={{ pointerEvents: "auto" }}>
@@ -286,37 +289,78 @@ export default function CorkBoard() {
           </g>
         </svg>
 
-        {caseFiles.map((card, i) => (
-          <motion.div
-            key={card.id}
-            className="absolute"
-            style={{
-              left: `${card.x * 100}%`,
-              top: `${card.y * 100}%`,
-              zIndex: draggingId === card.id ? 100 : 10 + i,
-            }}
-            initial={{ opacity: 0, y: -80, scale: 0.8 }}
-            animate={hasEntered ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{
-              delay:
-                ANIMATION_TIMINGS.cardEntryDelay +
-                i * ANIMATION_TIMINGS.cardStaggerDelay,
-              type: "spring",
-              damping: 20,
-              stiffness: 150,
-            }}
-          >
-            <PinnedCard
-              card={card}
-              onPinMove={handlePinMove}
-              onDragStateChange={handleDragStateChange}
-              onClick={setSelectedCard}
-            />
-          </motion.div>
-        ))}
+        {/* ── Scattered cards ── */}
+        {caseFiles.map((card, i) => {
+          let cx = card.x;
+          let cy = card.y;
+
+          if (isMobile) {
+            // Lower Technical Stack and pull slightly left from the right edge 24
+            if (card.id === "clue-where") {
+              cx = 0.71;
+              cy = 0.29;
+            }
+            // Move Graphic Design left
+            if (card.id === "design") {
+              cx = 0.28
+              cy = 0.29;
+            }
+            // Move Photography left
+            if (card.id === "photo") {
+              cx = 0.28;
+            }
+            // Move Videography left
+            if (card.id === "video") {
+              cx = 0.23;
+            }
+            // Move Web Design right
+            if (card.id === "illustration") {
+              cx = 0.73;
+            }
+            // Move Find Out About Him right
+            if (card.id === "clue-find") {
+              cx = 0.74;
+            }
+          }
+
+          let finalMobileScale = 0.85;
+          // Make Graphic Design, Video, and brown paper cards (Web Design, Photo) slightly smaller than default, but not too small
+          if (card.id === "design" || card.id === "video" || card.type.includes("brown")) {
+            finalMobileScale = 0.74;
+          }
+
+          return (
+            <motion.div
+              key={card.id}
+              className="absolute"
+              style={{
+                left: isMobile ? `calc(50% + ${(cx - 0.5) * 160}vw)` : `${card.x * 100}%`,
+                top: isMobile ? `calc(47% + ${(cy - 0.5) * 85}vh)` : `${card.y * 100}%`,
+                zIndex: draggingId === card.id ? 100 : 10 + i,
+              }}
+              initial={{ opacity: 0, y: -80, scale: isMobile ? 0.6 : 0.8 }}
+              animate={hasEntered ? { opacity: 1, y: 0, scale: isMobile ? finalMobileScale : 1 } : {}}
+              transition={{
+                delay:
+                  ANIMATION_TIMINGS.cardEntryDelay +
+                  i * ANIMATION_TIMINGS.cardStaggerDelay,
+                type: "spring",
+                damping: 20,
+                stiffness: 150,
+              }}
+            >
+              <PinnedCard
+                card={{ ...card, isDraggable: isMobile ? false : card.isDraggable }}
+                onPinMove={handlePinMove}
+                onDragStateChange={handleDragStateChange}
+                onClick={setSelectedCard}
+              />
+            </motion.div>
+          );
+        })}
 
         {/* ── Global Pin Layer (Above Strings) ── */}
-        <div className="absolute inset-0 pointer-events-none z-30">
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 130 }}>
           {caseFiles.map((card, i) => {
             const pos = pinPositions[card.id];
             if (!pos || card.type === "cork-text") return null;
@@ -346,8 +390,6 @@ export default function CorkBoard() {
       />
 
       {/* ── Single shared Bulb — fixed above ALL layers including the modal ── */}
-      {/* The full-screen fixed wrapper keeps z-index above modal (200) while    */}
-      {/* Bulb's internal `absolute top-0 right-16` still positions it correctly */}
       <div
         className="fixed inset-0 pointer-events-none"
         style={{ zIndex: 250 }}

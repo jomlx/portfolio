@@ -12,7 +12,7 @@ export const PORTFOLIO_META = {
     "Creative portfolio showcasing graphic design, videography, and photography work",
   author: "Jomel",
   year: new Date().getFullYear(),
-  tagline: "The Midnight Creator",
+  tagline: "Joml The Mind Behind",
   caseFileNumber: "#107",
 } as const;
 

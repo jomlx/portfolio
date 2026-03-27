@@ -14,11 +14,10 @@ export function TornPaperGreyCard({ card, isDragging }: CardBodyProps) {
         }}
       >
         <h3
-          className="text-2xl text-black w-full"
+          className="text-2xl text-black w-full whitespace-normal md:whitespace-nowrap"
           style={{
             fontFamily: '"Architects Daughter", cursive',
             padding: "15px 16px",
-            whiteSpace: "nowrap",
             letterSpacing: "1px",
           }}
         >

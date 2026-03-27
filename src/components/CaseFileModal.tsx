@@ -8,6 +8,7 @@ import StringConnector from "./StringConnector";
 import { getModalConnections } from "../data/modalConnections";
 import Wall from "../assets/wall.webp";
 import Paper from "../assets/paper.webp";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 /* ─── Spring config — must match CorkBoard's SLIDE_SPRING ─── */
 const SLIDE_SPRING = { type: "spring", damping: 28, stiffness: 280 } as const;
@@ -233,6 +234,7 @@ const MediaPreview = memo(function MediaPreview({
    ─ Newspaper-style column for text; scattered polaroid cards for media
    ═══════════════════════════════════════════════════════════════════════════ */
 function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
+  const isMobile = useIsMobile();
   const exhibitsRef = useRef<HTMLDivElement>(null);
   const [exhibitPins, setExhibitPins] = useState<Record<number, PinPosition>>(
     {},
@@ -394,6 +396,130 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
               CLASSIFIED
             </div>
 
+            {/* ════════ MOBILE LAYOUT ════════ */}
+            {isMobile && (
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  overflowY: "auto",
+                  WebkitOverflowScrolling: "touch",
+                  zIndex: 10,
+                  backgroundImage: `url(${Paper})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                <div style={{ padding: "clamp(16px,5vw,28px)", paddingBottom: 80 }}>
+
+                  {/* Mobile header */}
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1, duration: 0.35 }}
+                    style={{
+                      background: "linear-gradient(180deg, #faf8f0 0%, #f0ead6 100%)",
+                      padding: "clamp(10px,3vw,18px) clamp(12px,4vw,20px) clamp(8px,2vw,14px)",
+                      boxShadow: "3px 4px 12px rgba(0,0,0,0.45)",
+                      marginBottom: 16,
+                      position: "relative",
+                    }}
+                  >
+                    <div style={{ position: "absolute", top: -9, left: 0, background: "rgba(168,43,43,0.78)", padding: "2px 12px", clipPath: "polygon(0% 0%, 100% 2%, 99% 98%, 1% 100%)" }}>
+                      <p style={{ fontFamily: FONTS.architectsDaughter, fontSize: "clamp(7px,2.5vw,10px)", color: "#fff", letterSpacing: "0.12em", opacity: 0.95 }}>CASE FILE</p>
+                    </div>
+                    <h2 id={`modal-title-${card.id}`} style={{ fontFamily: FONTS.special, color: "#2c1810", fontSize: "clamp(1.1rem,5vw,1.8rem)", lineHeight: 1.1, marginBottom: 4, paddingTop: 4, opacity: 0.85 }}>{card.title}</h2>
+                    {card.subtitle && <p style={{ fontFamily: FONTS.architectsDaughter, fontSize: "clamp(0.55rem,2.5vw,0.7rem)", textTransform: "uppercase", letterSpacing: "0.22em", opacity: 0.48, color: "#2c1810" }}>{card.subtitle}</p>}
+                  </motion.div>
+
+                  {/* Mobile text column */}
+                  {hasText && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2, duration: 0.35 }}
+                      style={{
+                        background: "linear-gradient(175deg, #faf7ef 0%, #f5edda 60%, #ecddc0 100%)",
+                        boxShadow: "3px 5px 14px rgba(0,0,0,0.38)",
+                        padding: "clamp(10px,3vw,18px)",
+                        marginBottom: 16,
+                      }}
+                    >
+                      <div style={{ borderTop: "2px solid rgba(0,0,0,0.18)", marginBottom: 8, paddingTop: 6 }} />
+                      <p style={{ fontFamily: FONTS.special, fontSize: "clamp(0.65rem,2.8vw,0.85rem)", color: COLORS.text.red, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 6, opacity: 0.75 }}>▸ {card.contentLabel || "Case Summary"}</p>
+                      {card.content && <p style={{ color: "#2c1810", fontFamily: FONTS.architectsDaughter, fontSize: "clamp(0.7rem,3vw,0.9rem)", lineHeight: 1.55, marginBottom: 10, whiteSpace: "pre-wrap" }}>{card.content}</p>}
+                      {card.content && card.details && card.details.length > 0 && <div style={{ borderTop: "1px dashed rgba(0,0,0,0.16)", margin: "8px 0" }} />}
+                      {card.details && card.details.length > 0 && (
+                        <>
+                          <h3 style={{ fontFamily: FONTS.special, color: COLORS.text.red, fontSize: "clamp(0.65rem,2.8vw,0.85rem)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 6 }}>▸ {card.detailsLabel || "Evidence Log"}</h3>
+                          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                            {card.details.map((detail, i) => (
+                              <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 4, color: "#3d2b1f", fontFamily: FONTS.architectsDaughter, fontSize: "clamp(0.65rem,2.8vw,0.85rem)", marginBottom: 3, lineHeight: 1.45 }}>
+                                <span style={{ color: "#C0392B", flexShrink: 0, marginTop: 1 }}>•</span>
+                                <span>{detail}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                    </motion.div>
+                  )}
+
+                  {/* Mobile media grid */}
+                  {mediaItems.length > 0 && (
+                    <>
+                      <p style={{ fontFamily: FONTS.architectsDaughter, color: "rgba(192,57,43,0.6)", fontSize: "clamp(0.55rem,2.5vw,0.7rem)", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: 10 }}>▸ Exhibits</p>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                        {mediaItems.map((item, idx) => (
+                          <motion.figure
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.88 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.25 + idx * 0.06, type: "spring", damping: 18, stiffness: 140 }}
+                            style={{ margin: 0, cursor: "zoom-in" }}
+                            onClick={() => setPreviewItem(item)}
+                            role="button"
+                            aria-label={`View ${item.caption ?? `exhibit ${idx + 1}`} in full size`}
+                          >
+                            <div style={{ background: "linear-gradient(180deg,#FAF6F0 0%,#F0E8D5 100%)", padding: "5px 5px 20px", boxShadow: "4px 6px 16px rgba(0,0,0,0.55)", position: "relative" }}>
+                              <div style={{ background: "#1A1A1A", height: "clamp(70px,24vw,120px)", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                {item.type === "image" ? (
+                                  <img src={item.url} alt={item.caption ?? `Exhibit ${idx + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" draggable={false} />
+                                ) : (
+                                  <video src={item.url} style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }} preload="metadata" muted aria-label={item.caption ?? `Exhibit ${idx + 1} video`} />
+                                )}
+                              </div>
+                              {item.caption && (
+                                <figcaption style={{ position: "absolute", bottom: 3, left: 0, width: "100%", textAlign: "center", fontSize: "clamp(0.4rem,1.8vw,0.54rem)", fontFamily: FONTS.special, color: "#1A1208", opacity: 0.68 }}>
+                                  Exhibit {(idx + 1).toString().padStart(2, "0")} – {item.caption}
+                                </figcaption>
+                              )}
+                            </div>
+                          </motion.figure>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {/* Mobile back button */}
+                  <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+                    <button
+                      onClick={onClose}
+                      id={`modal-close-${card.id}`}
+                      aria-label="Go back to corkboard"
+                      type="button"
+                      style={{ background: "rgba(168,43,43,0.82)", border: "none", cursor: "pointer", padding: "7px 20px 6px", clipPath: "polygon(0% 0%, 100% 2%, 99% 98%, 1% 100%)", boxShadow: "2px 3px 8px rgba(0,0,0,0.5)", zIndex: 50 }}
+                    >
+                      <span style={{ fontFamily: FONTS.architectsDaughter, fontSize: "clamp(11px,3.5vw,14px)", color: "#fff", letterSpacing: "0.14em", opacity: 0.95 }}>← BACK</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ════════ DESKTOP LAYOUT ════════ */}
+            {!isMobile && (
+              <>
             {/* ════════════════════════════════════════════════
                 CORK PAPER — same as CorkBoard's paper element
                 w-2xl h-140 rotate-2 opacity-80 shadow-md
@@ -966,6 +1092,8 @@ function CaseFileModal({ card, onClose, isLightOn }: CaseFileModalProps) {
                 </span>
               </button>
             </div>
+            </>
+            )}{/* end !isMobile */}
           </motion.div>
         )}
       </AnimatePresence>
